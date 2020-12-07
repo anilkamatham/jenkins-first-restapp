@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.jenkis.rest.example</groupId>
-	<artifactId>RestAppJenkins1</artifactId>
+	<artifactId>RestApp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>RestAppJenkins1</name>
 	<description>Demo project for jenkins</description>
