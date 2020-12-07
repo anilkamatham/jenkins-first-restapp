@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * 
  * @author anilk
- *
+ * aiuthor
  */
 @SpringBootApplication
 public class RestAppJenkins1Application {
