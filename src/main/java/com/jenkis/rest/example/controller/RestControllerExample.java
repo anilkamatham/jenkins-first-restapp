@@ -14,11 +14,11 @@ public class RestControllerExample {
 
 	@GetMapping("/name")
 	public String getName() {
-		return "Anil Kamatham";
+		return "Anil Kumar Kamatham";
 	}
 	
 	@GetMapping("/hobby")
 	public String getHobby() {
-		return "Cricket";
+		return "Ludo";
 	}
 }
