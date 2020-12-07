@@ -16,4 +16,9 @@ public class RestControllerExample {
 	public String getName() {
 		return "Anil Kamatham";
 	}
+	
+	@GetMapping("/hobby")
+	public String getHobby() {
+		return "Cricket";
+	}
 }
