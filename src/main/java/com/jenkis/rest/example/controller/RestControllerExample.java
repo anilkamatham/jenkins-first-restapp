@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 
  * @author anilk
- * this  ghjg
+ * this
  */
 @RestController
 @RequestMapping("jenkins/rest")
