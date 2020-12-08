@@ -23,7 +23,7 @@ pipeline {
             parallel {
                 stage('Deploy to stage') {
                      steps {
-                          bat "winscp -i C:/Technology/Javaworkspaces/JenkinProjects/jenkins-tomcat-key-pair1.pem **/target/*.war ec2-user@${params.tomcat_dev}:/var/lib/tomcat/webapps" 
+                          sh "scp -i C:/Technology/Javaworkspaces/JenkinProjects/jenkins-tomcat-key-pair1.pem **/target/*.war ec2-user@${params.tomcat_dev}:/var/lib/tomcat/webapps" 
                      }                
                 }
                 stage('Deploy to prod') {
