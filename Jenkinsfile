@@ -1,20 +1,37 @@
 pipeline {
-    agent any
-    stages{
-        stage('Init'){
-            steps{
-                echo "Testing"
+    agent any {
+        stages{
+            stage('Build'){
+                steps {
+                    bat 'mvn clean package'
+                }
+                post {
+                    echo 'Now Archiving...'
+                    archiveArtifacts artifact: '**/targer/*.war'
+                }             
             }
-        }
-        stage('Build'){
-            steps{
-                echo "Building"
+            stage('Deploying to stage') {
+                steps {
+                    build job: 'pipeline-deploy-to-local-stage-tomcat'
+                }
             }
-        }
-        stage('Deploy'){
-            steps{
-                echo "Deploying"
+            stage('Deploying to prod') {
+                steps {
+                    timeout(time:5, unit:'DAYS') {
+                        input message: 'Approve Production Deployment'
+                    }
+                    build job: 'pipeline-deploy-to-local-prod-tomcat'
+                }
+                post {
+                    success {
+                        echo 'Code deployed to production'                        
+                    }
+                    failure {
+                        echo 'Deployment failed'
+                    }
+
+                }
             }
-        }
         }
     }
+}
