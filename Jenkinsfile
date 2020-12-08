@@ -6,8 +6,10 @@ pipeline {
                     bat 'mvn clean package'
                 }
                 post {
+                    success {
                     echo 'Now Archiving...'
                     archiveArtifacts artifact: '**/targer/*.war'
+                    } 
                 }             
             }
             stage('Deploying to stage') {
