@@ -23,8 +23,9 @@ pipeline {
             parallel {
                 stage('Deploy to stage') {
                      steps {
-                           sh 'pwd'
-                          sh "scp -i C:/Technology/Javaworkspaces/JenkinProjects/jenkins-tomcat-key-pair1.pem /target/RestApp.war ec2-user@${params.tomcat_dev}:/var/lib/tomcat/webapps" 
+                        sshagent(['tomcat-ec2']) {
+                            sh "scp -o StrictHostKeyChecking=no **/*.war ec2-user@13.126.123.189:/var/lib/tomcat/webapps"
+                        }   
                      }                
                 }
                
