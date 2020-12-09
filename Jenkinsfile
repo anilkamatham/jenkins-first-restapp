@@ -23,8 +23,8 @@ pipeline {
             parallel {
                 stage('Deploy to stage') {
                      steps {
-                        sshagent(['tomcat-ec2']) {
-                            sh "scp -o StrictHostKeyChecking=no **/*.war ec2-user@13.126.123.189:/var/lib/tomcat/webapps"
+                        sshagent(credentials: ['tomcat-ec2']) {
+                            sh "scp -o StrictHostKeyChecking=no **/*.war ec2-user@13.127.201.110:/var/lib/tomcat/webapps"
                         }   
                      }                
                 }
