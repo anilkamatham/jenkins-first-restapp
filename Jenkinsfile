@@ -32,7 +32,7 @@ pipeline {
                         // sshagent(['tomcat-ec2']) {
                           //  sh "scp -o StrictHostKeyChecking=no **/*.war ec2-user@${params.tomcat_dev}:/usr/share/tomcat/webapps"
                        // } 
-                       sh "scp -i /c/Technology/Javaworkspaces/JenkinProjects/jenkins-tomcat-ec2.pem **/target/*.war ec2-user@${params.tomcat_dev}:/usr/share/tomcat/webapps" 
+                       sh "scp -i /c/Technology/Javaworkspaces/JenkinProjects/jenkins-tomcat-ec2.pem **/*.war ec2-user@${params.tomcat_dev}:/usr/share/tomcat/webapps" 
 
                      }                
                 }
