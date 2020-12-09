@@ -6,7 +6,8 @@ pipeline {
     }
     tools {
         jdk 'localJDK'
-    }    
+    }
+    
     triggers {
         pollSCM('* * * * *')
     }
