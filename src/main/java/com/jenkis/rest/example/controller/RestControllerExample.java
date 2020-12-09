@@ -19,6 +19,6 @@ public class RestControllerExample {
 	
 	@GetMapping("/hobby")
 	public String getHobby() {
-		return "jumping";
+		return "jumping japak";
 	}
 }
