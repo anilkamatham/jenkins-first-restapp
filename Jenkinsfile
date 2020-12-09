@@ -29,9 +29,11 @@ pipeline {
             parallel {
                 stage('Deploy to stage') {
                      steps {
-                        sshagent(['tomcat-ec2']) {
-                            sh "scp -o StrictHostKeyChecking=no **/*.war ec2-user@${params.tomcat_dev}:/usr/share/tomcat/webapps"
-                        }   
+                        // sshagent(['tomcat-ec2']) {
+                          //  sh "scp -o StrictHostKeyChecking=no **/*.war ec2-user@${params.tomcat_dev}:/usr/share/tomcat/webapps"
+                       // } 
+                       sh "scp -i C:/Technology/Javaworkspaces/JenkinProjects/jenkins-tomcat-ec2 **/target/*.war ec2-user@${params.tomcat_dev}:/usr/share/tomcat/webapps" 
+
                      }                
                 }
                 stage('Deploy to prod') {
