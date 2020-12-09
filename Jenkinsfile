@@ -1,8 +1,8 @@
 pipeline {
     agent any
     parameters {
-        string(name: 'tomcat_dev', defaultValue: '13.126.123.189', description: 'Staging server' )
-        string(name: 'tomcat_prod', defaultValue: '15.206.148.111', description: 'Production server')        
+        string(name: 'tomcat_dev', defaultValue: '13.127.201.110', description: 'Staging server' )
+        string(name: 'tomcat_prod', defaultValue: '15.206.75.233', description: 'Production server')        
     }
     tools {
         jdk 'localJDK'
@@ -28,14 +28,14 @@ pipeline {
                 stage('Deploy to stage') {
                      steps {
                         sshagent(['tomcat-ec2']) {
-                            sh "scp -o StrictHostKeyChecking=no **/*.war ec2-user@13.127.201.110:/usr/share/tomcat/webapps"
+                            sh "scp -o StrictHostKeyChecking=no **/*.war ec2-user@${params.tomcat_dev}:/usr/share/tomcat/webapps"
                         }   
                      }                
                 }
                 stage('Deploy to prod') {
                     steps {
                        sshagent(['tomcat-ec2']){
-                           sh "scp -o StrictHostKeyChecking=no **/*.war ec2-user@15.206.75.233://usr/share/tomcat/webapps"
+                           sh "scp -o StrictHostKeyChecking=no **/*.war ec2-user@${params.tomcat_prod}:/usr/share/tomcat/webapps"
                     }
                 }
                
