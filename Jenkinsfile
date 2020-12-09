@@ -22,6 +22,7 @@ pipeline {
                 } 
             } 
             
+            
         }
         stage('Deployment') {
             parallel {
