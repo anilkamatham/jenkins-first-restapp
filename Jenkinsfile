@@ -1,7 +1,7 @@
 pipeline {
     agent {label 'slave-1'}
     parameters {
-        string(name: 'tomcat_dev', defaultValue: '13.233.255.138', description: 'Staging server' ) 
+        string(name: 'tomcat_dev', defaultValue: '65.0.4.169', description: 'Staging server' ) 
     }
     
     triggers {
@@ -27,7 +27,7 @@ pipeline {
                         // sshagent(['tomcat-ec2']) {
                           //  sh "scp -o StrictHostKeyChecking=no **/*.war ec2-user@${params.tomcat_dev}:/usr/share/tomcat/webapps"
                        // } 
-                       sh "scp -i /home/anilslave/slave/jenkins-master-slave-key-pair.pem **/*.war ec2-user@${params.tomcat_dev}:/usr/share/tomcat/webapps" 
+                       sh "scp -i /home/anilslave/slave/jenkins-master-slave.pem **/*.war ec2-user@${params.tomcat_dev}:/usr/share/tomcat/webapps" 
 
                      }                
         }
