@@ -22,12 +22,12 @@ pipeline {
             
         }
         stage('Deployment') {
-                 
+
                      steps {
-                        // sshagent(['tomcat-ec2']) {
-                          //  sh "scp -o StrictHostKeyChecking=no **/*.war ec2-user@${params.tomcat_dev}:/usr/share/tomcat/webapps"
-                       // } 
-                       sh "scp -i ~/.ssh/id_rsa **/*.war ec2-user@${params.tomcat_dev}:/usr/share/tomcat/webapps" 
+                        sshagent(['ec2-tomcat']){
+                            sh "scp -o StrictHostKeyChecking=no **/*.war ec2-user@${params.tomcat_dev}:/usr/share/tomcat/webapps"
+                        } 
+                      // sh "scp -i ~/.ssh/id_rsa **/*.war ec2-user@${params.tomcat_dev}:/usr/share/tomcat/webapps" 
 
                      }                
         }
