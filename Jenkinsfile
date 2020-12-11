@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent {label 'slave-1'}
     parameters {
         string(name: 'tomcat_dev', defaultValue: '13.233.255.138', description: 'Staging server' ) 
     }
