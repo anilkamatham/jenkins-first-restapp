@@ -1,11 +1,7 @@
 pipeline {
     agent any
     parameters {
-        string(name: 'tomcat_dev', defaultValue: '13.127.201.110', description: 'Staging server' )
-        string(name: 'tomcat_prod', defaultValue: '15.206.75.233', description: 'Production server')        
-    }
-    tools {
-        jdk 'localJDK'
+        string(name: 'tomcat_dev', defaultValue: '13.233.255.138', description: 'Staging server' ) 
     }
     
     triggers {
@@ -26,25 +22,14 @@ pipeline {
             
         }
         stage('Deployment') {
-            parallel {
-                stage('Deploy to stage') {
+                 
                      steps {
                         // sshagent(['tomcat-ec2']) {
                           //  sh "scp -o StrictHostKeyChecking=no **/*.war ec2-user@${params.tomcat_dev}:/usr/share/tomcat/webapps"
                        // } 
-                       sh "scp -i /c/Technology/Javaworkspaces/JenkinProjects/jenkins-tomcat-ec2.pem **/*.war ec2-user@${params.tomcat_dev}:/usr/share/tomcat/webapps" 
+                       sh "scp -i /home/anilslave/slave/jenkins-master-slave-key-pair.pem **/*.war ec2-user@${params.tomcat_dev}:/usr/share/tomcat/webapps" 
 
                      }                
-                }
-                stage('Deploy to prod') {
-                    steps {
-                       sshagent(['tomcat-ec2']){
-                           sh "scp -o StrictHostKeyChecking=no **/*.war ec2-user@${params.tomcat_prod}:/usr/share/tomcat/webapps"
-                    }
-                }
-               
-            }
         }
     }
  }
-}
