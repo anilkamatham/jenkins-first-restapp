@@ -27,7 +27,7 @@ pipeline {
                         // sshagent(['tomcat-ec2']) {
                           //  sh "scp -o StrictHostKeyChecking=no **/*.war ec2-user@${params.tomcat_dev}:/usr/share/tomcat/webapps"
                        // } 
-                       sh "scp -i /home/anilslave/slave/id_rsa **/*.war ec2-user@${params.tomcat_dev}:/usr/share/tomcat/webapps" 
+                       sh "scp -i ~/.ssh/id_rsa **/*.war ec2-user@${params.tomcat_dev}:/usr/share/tomcat/webapps" 
 
                      }                
         }
