@@ -15,7 +15,7 @@ pipeline {
            post {
                 success {
                     echo 'Archieving the artifcats'
-                    archieveArtifacts: '**/target/*.war'
+                    archiveArtifacts artifacts: '**/target/*.war'
                 }
                 failure {
                     echo 'failed to build the code'
