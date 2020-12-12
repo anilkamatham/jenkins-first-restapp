@@ -1,35 +1,39 @@
 pipeline {
-    agent {label 'slave-1'}
+    agent {label 'jenkins-slave1'}
     parameters {
-        string(name: 'tomcat_dev', defaultValue: '65.0.4.169', description: 'Staging server' ) 
+        string(name: 'tomcat_dev', defaultValue: '52.66.69.64' description: 'staging server')        
     }
-    
     triggers {
         pollSCM('* * * * *')
     }
-    stages{
-        stage('Build') {
-            steps {
-                sh 'mvn clean package'
-            }
-            post {
+    stages {
+       stage('Build') {
+           steps {
+                echo 'compiling and testing the code...'
+                sh 'mvn clean package'                
+           }
+           post {
                 success {
-                 echo 'Archiving Now...'
-                 archiveArtifacts artifacts: '**/target/*.war'
-                } 
-            } 
-            
-            
-        }
-        stage('Deployment') {
-
-                     steps {
-                        sshagent(['ec2-tomcat']){
-                            sh "scp -o StrictHostKeyChecking=no **/*.war ec2-user@${params.tomcat_dev}:/usr/share/tomcat/webapps"
-                        } 
-                      // sh "scp -i ~/.ssh/id_rsa **/*.war ec2-user@${params.tomcat_dev}:/usr/share/tomcat/webapps" 
-
-                     }                
-        }
+                    echo 'Archieving the artifcats'
+                    archieveArtifacts: '**/target/*.war'
+                }
+                failure {
+                    echo 'failed to build the code'
+                }
+           }
+       }
+       stage('Deploy to stage') {
+           steps {
+               sshagent(['ec2-tomcat-stage']) {
+                   sh 'scp -o StrictHostKeyChecking=no **/*.war tomcat-stage@52.66.69.64:/usr/share/tomcat/webapps'
+               }
+               success {
+                   echo 'Successfully deployed to stage'                   
+               }
+               failure {
+                   echo 'Failed to deployed to stage'
+               }
+           }
+       }
     }
- }
+}
