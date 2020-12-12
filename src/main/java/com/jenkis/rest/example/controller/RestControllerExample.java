@@ -19,6 +19,6 @@ public class RestControllerExample {
 	
 	@GetMapping("/hobby")
 	public String getHobby() {
-		return "jumping japak new";
+		return "multiple agents with ec2 stage and prod servers";
 	}
 }
