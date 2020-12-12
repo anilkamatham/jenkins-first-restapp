@@ -3,6 +3,7 @@ pipeline {
     parameters {
         string(name: 'tomcat_dev', defaultValue: '52.66.69.64', description: 'staging server')        
     }
+    
     tools {
         maven 'localmaven'
     }
