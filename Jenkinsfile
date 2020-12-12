@@ -4,7 +4,7 @@ pipeline {
         string(name: 'tomcat_dev', defaultValue: '52.66.69.64', description: 'staging server')        
     }
     tools {
-        maven 'localMoven'
+        maven 'localmaven'
     }
     triggers {
         pollSCM('* * * * *')
