@@ -52,7 +52,7 @@ pipeline {
             } 
             stage('Deploy to prod') {
                 agent {
-                    label: 'jenkins-slave2'
+                    label 'jenkins-slave2'
                 }
                 steps {                 
                         unstash 'appartifact'
