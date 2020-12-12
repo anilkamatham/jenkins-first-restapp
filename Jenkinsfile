@@ -31,6 +31,7 @@ pipeline {
                sshagent(['ec2-tomcat-stage']) {
                    sh 'scp -o StrictHostKeyChecking=no **/*.war tomcat-stage@52.66.69.64:/usr/share/tomcat/webapps'
                }
+           }
                post{
                     success {
                         echo 'Successfully deployed to stage'                   
@@ -38,8 +39,7 @@ pipeline {
                     failure {
                         echo 'Failed to deployed to stage'
                     }
-               }
-           }
+               }           
        }
     }
 }
