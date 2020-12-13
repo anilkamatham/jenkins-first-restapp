@@ -33,7 +33,7 @@ pipeline {
                 steps {                
                     //sshagent(['ec2-tomcat-stage']) {
                       //  sh "scp -o StrictHostKeyChecking=no **/*.war tomcat-stage@${params.tomcat_dev}:/usr/share/tomcat/webapps"
-                      sh 'scp -i '
+                      sh "scp -i /home/jenkins-slave1/.ssh/id_rsa **/*.war tomcat-stage@${params.tomcat_dev}:/usr/share/tomcat/webapps"
                     }
                 
                 post{
