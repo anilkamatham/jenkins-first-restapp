@@ -1,5 +1,5 @@
 pipeline {
-    agent none
+    agent any
     parameters {
         string(name: 'tomcat_dev', defaultValue: '52.66.69.64', description: 'staging server')        
         string(name: 'tomcat_prod', defaultValue: ' 13.127.36.54', description: 'production server')               
@@ -12,12 +12,10 @@ pipeline {
         pollSCM('* * * * *')
     }
     stages {
-       stage('Build') {
-         agent any  
+       stage('Build') {         
            steps {
                 echo 'compiling and testing the code...'
-                sh 'mvn clean package'  
-                stash includes: '**/target/*.war', name: 'appartifact'
+                sh 'mvn clean package'                 
            }
            post {
                 success {
@@ -29,45 +27,20 @@ pipeline {
                 }
            }
        }
-       stage('Deployment') {
-          parallel {  
-            stage('Deploy to stage') {
-                agent {
-                    label 'jenkins-slave1'
-                }
-                steps {
-                    unstash 'appartifact'
+       stage('Deploy to stage') {                                  
+                steps {                
                     sshagent(['ec2-tomcat-stage']) {
                         sh "scp -o StrictHostKeyChecking=no **/*.war tomcat-stage@${params.tomcat_dev}:/usr/share/tomcat/webapps"
                     }
                 }
-                    post{
-                            success {
-                                echo 'Successfully deployed to stage'                   
-                            }
-                            failure {
-                                echo 'Failed to deployed to stage'
-                            }
-                    } 
-            } 
-            stage('Deploy to prod') {
-                agent {
-                    label 'jenkins-slave2'
-                }
-                steps {                 
-                        unstash 'appartifact'
-                        sh "scp -i ~/.ssh/id_rsa_slave2_prod **/*.war tomcat-stage@${params.tomcat_prod}:/usr/share/tomcat/webapps"
-                }
-                    post{
-                            success {
-                                echo 'Successfully deployed to stage'                   
-                            }
-                            failure {
-                                echo 'Failed to deployed to stage'
-                            }
-                    } 
-            }  
-         }            
+                post{
+                   success {
+                      echo 'Successfully deployed to stage'                   
+                      }
+                    failure {   
+                        echo 'Failed to deployed to stage'
+                      }
+                   } 
+                }                        
        }
-    }
 }
