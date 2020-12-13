@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'jenkins-slave1'
+        label 'jenkins-slave2'
     }
     parameters {
         string(name: 'tomcat_dev', defaultValue: '52.66.69.64', description: 'staging server')        
@@ -29,11 +29,14 @@ pipeline {
                 }
            }
        }
-       stage('Deploy to stage') {                                  
+       stage('Deploy to prod') {                                  
                 steps {                
                     //sshagent(['ec2-tomcat-stage']) {
                       //  sh "scp -o StrictHostKeyChecking=no **/*.war tomcat-stage@${params.tomcat_dev}:/usr/share/tomcat/webapps"
-                      sh "scp -i /home/jenkins-slave1/.ssh/id_rsa **/*.war tomcat-stage@${params.tomcat_dev}:/usr/share/tomcat/webapps"
+                    //  sh "scp -i /home/jenkins-slave1/.ssh/id_rsa **/*.war tomcat-stage@${params.tomcat_dev}:/usr/share/tomcat/webapps"
+                    sshagent(['ec2-tomcat-prod']){
+                        sh "scp -i ~/.ssh/id_rsa_slave2_prod **/*.war tomcat-prod@${params.tomcat_prod}:/usr/share/tomcat/webapps"
+                    }
                     }
                 
                 post{
