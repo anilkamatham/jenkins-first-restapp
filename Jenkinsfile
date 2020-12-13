@@ -35,7 +35,7 @@ pipeline {
                       //  sh "scp -o StrictHostKeyChecking=no **/*.war tomcat-stage@${params.tomcat_dev}:/usr/share/tomcat/webapps"
                       sh 'scp -i '
                     }
-                }
+                
                 post{
                    success {
                       echo 'Successfully deployed to stage'                   
