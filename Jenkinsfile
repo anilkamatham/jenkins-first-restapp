@@ -58,7 +58,7 @@ pipeline {
              steps {
                  echo "user credentials using environmet varaible USER_CREDENTIALS ${env.USER_CREDENTIALS}"             
                  withCredentials([
-                     usernamePassword(credentials: 'anilcredentials', usernameVariable: USER, passwordVariable: PWD)
+                     usernamePassword(credentialsId: 'anilcredentials', usernameVariable: USER, passwordVariable: PWD)
                  ]) {
                       echo "username: ${USER} password: ${PWD}"
                  }
