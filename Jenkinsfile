@@ -21,7 +21,7 @@ pipeline {
         ARTIFACT_TO_COPY="**/*.war"
     }
     stages {
-        stage('Build') {
+        stage('Build dev') {
             steps {
                 sh 'mvn clean package'                
             } 
@@ -68,7 +68,24 @@ pipeline {
                }
              }
         }
-        stage('Deploy to prod'){
+        stage('Build prod') {
+            agent {
+                label 'jenkins-slave2'
+            }
+            steps {
+                sh 'mvn clean package'                
+            } 
+            post {
+                success {
+                    archiveArtifacts artifacts: "${env.ARTIFATCS_PATH}"
+                }
+                failure {
+                echo "job ${JOB_NAME} with ${BUILD_ID} is failed"
+            } 
+            }
+                          
+        }        
+        stage('Deploy to prod'){            
             agent {
                 label 'jenkins-slave2'
             }
