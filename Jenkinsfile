@@ -53,9 +53,7 @@ pipeline {
            }
         }
         stage('Deploy to stage'){
-          agent {
-                label 'jenkins-slave1'
-            }
+         
         
              steps {
                  echo "user credentials using environmet varaible USER_CREDENTIALS ${env.USER_CREDENTIALS}"             
