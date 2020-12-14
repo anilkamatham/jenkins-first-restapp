@@ -26,12 +26,13 @@ pipeline {
             } 
             post {
                 success {
-                    archiveArtifacts artifacts: ${env.ARTIFATCS_PATH}
+                    archiveArtifacts artifacts: "${env.ARTIFATCS_PATH}"
                 }
-            }
-            failure {
+                failure {
                 echo "job ${JOB_NAME} with ${BUILD_ID} is failed"
-            }               
+            } 
+            }
+                          
         }
         stage('Test') {
            when {
