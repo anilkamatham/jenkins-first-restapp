@@ -1,73 +1,68 @@
 pipeline {
-    agent none
-    parameters {
-        string(name: 'tomcat_dev', defaultValue: '52.66.69.64', description: 'staging server')        
-        string(name: 'tomcat_prod', defaultValue: ' 13.127.36.54', description: 'production server')               
+    agent {
+        label 'jenkins-slave1'
     }
-    
+    parameters {
+        string(name: 'dev_server', defaultValue: '52.66.69.64', description: 'dev server ip address')
+        choice(name: 'branch', choices: ['master', 'dev'], description: 'branch to checkout and build')
+        boolean(name: 'onlymaster', defaultValue: false, description: 'run only when dev branch is checkedout')
+    }
     tools {
         maven 'localmaven'
     }
     triggers {
         pollSCM('* * * * *')
     }
+    environment {      
+        EXECUTE_STAGE_TEST = "no"
+        ARTIFATCS_PATH= "**/*.war"
+        USER_CREDENTIALS=credentials('anilcredentials')
+        ARTIFACT_TO_COPY="**/*.war"
+    }
     stages {
-       stage('Build') {
-         agent any  
-           steps {
-                echo 'compiling and testing the code...'
-                sh 'mvn clean package'  
-                stash includes: '**/target/*.war', name: 'appartifact'
-           }
-           post {
-                success {
-                    echo 'Archieving the artifcats'
-                    archiveArtifacts artifacts: '**/target/*.war'
-                }
-                failure {
-                    echo 'failed to build the code'
-                }
-           }
-       }
-       stage('Deployment') {
-          parallel {  
-            stage('Deploy to stage') {
-                agent {
-                    label 'jenkins-slave1'
-                }
-                steps {
-                    unstash 'appartifact'
-                    sshagent(['ec2-tomcat-stage']) {
-                        sh "scp -o StrictHostKeyChecking=no **/*.war tomcat-stage@${params.tomcat_dev}:/usr/share/tomcat/webapps"
-                    }
-                }
-                    post{
-                            success {
-                                echo 'Successfully deployed to stage'                   
-                            }
-                            failure {
-                                echo 'Failed to deployed to stage'
-                            }
-                    } 
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'                
             } 
-            stage('Deploy to prod') {
-                agent {
-                    label 'jenkins-slave2'
+            post {
+                success {
+                    archiveArtifacts artifacts: ${env.ARTIFATCS_PATH}
                 }
-                steps {                 
-                        unstash 'appartifact'
-                        sh "scp -i ~/.ssh/id_rsa_slave2_prod **/*.war tomcat-stage@${params.tomcat_prod}:/usr/share/tomcat/webapps"
-                }
-                    post{
-                            success {
-                                echo 'Successfully deployed to stage'                   
-                            }
-                            failure {
-                                echo 'Failed to deployed to stage'
-                            }
-                    } 
-            }  
-         }            
-       }
+            }
+            failure {
+                echo "job ${JOB_NAME} with ${BUILD_ID} is failed"
+            }               
+        }
+        stage('Test') {
+           when {
+               expression {
+                   EXECUTE_STAGE_TEST=='yes'
+               }
+           }
+           steps {
+              echo 'Testing the application'
+           }
+        }
+        stage('UAT') {
+           when {
+               expression {
+                   params.onlymaster==true
+               }
+           }
+           steps {
+               echo 'UAT testing...'
+           }
+        }
+        stage('Deploy to stage'){
+             steps {
+                 echo "user credentials using environmet varaible USER_CREDENTIALS ${env.USER_CREDENTIALS}"             
+                 withCredentials(['usernamePassword(credentialsid: 'anilcredentials', usernameVariable: 'USER', passwordVariable: 'PWD']'){
+                      echo "username: ${USER} password: ${PWD}"
+                 }
+               sshagent(['ec2-tomcat-stage']) {
+                   sh "scp -o StrictHostKeyChecking=no ${env.ARTIFACT_TO_COPY} tomcat-stage@${params.tomcat_dev}:/usr/share/tomcat/webapps"
+               }
+             }
+        }
     }
 }
