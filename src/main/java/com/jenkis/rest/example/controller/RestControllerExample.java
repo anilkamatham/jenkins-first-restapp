@@ -19,6 +19,6 @@ public class RestControllerExample {
 	
 	@GetMapping("/hobby")
 	public String getHobby() {
-		return "multiple agents with ec2 prod and prod server in prod using slave2";
+		return "jenkinsfile with different configurations on dev branch";
 	}
 }
