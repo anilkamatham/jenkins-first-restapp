@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        label 'jenkins-slave1'
-    }
+    agent none
     parameters {
         string(name: 'dev_server', defaultValue: '52.66.69.64', description: 'dev server ip address')
         choice(name: 'branch', choices: ['master', 'dev'], description: 'branch to checkout and build')
@@ -55,6 +53,10 @@ pipeline {
            }
         }
         stage('Deploy to stage'){
+          agent {
+                label 'jenkins-slave1'
+            }
+        
              steps {
                  echo "user credentials using environmet varaible USER_CREDENTIALS ${env.USER_CREDENTIALS}"             
                  withCredentials([
