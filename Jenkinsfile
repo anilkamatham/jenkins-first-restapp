@@ -63,7 +63,7 @@ pipeline {
                       echo "username: ${USER} password: ${PWD}"
                  }
                sshagent(['ec2-tomcat-stage']) {
-                   sh "scp -o StrictHostKeyChecking=no ${env.ARTIFACT_TO_COPY} tomcat-stage@${params.tomcat_dev}:/usr/share/tomcat/webapps"
+                   sh "scp -o StrictHostKeyChecking=no ${env.ARTIFACT_TO_COPY} tomcat-stage@${params.dev_server}:/usr/share/tomcat/webapps"
                }
              }
         }
