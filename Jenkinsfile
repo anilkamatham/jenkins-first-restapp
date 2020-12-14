@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+     agent {
+                label 'jenkins-slave1'
+            }
     parameters {
         string(name: 'dev_server', defaultValue: '52.66.69.64', description: 'dev server ip address')
         choice(name: 'branch', choices: ['master', 'dev'], description: 'branch to checkout and build')
