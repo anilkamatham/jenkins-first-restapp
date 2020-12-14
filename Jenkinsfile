@@ -57,7 +57,9 @@ pipeline {
         stage('Deploy to stage'){
              steps {
                  echo "user credentials using environmet varaible USER_CREDENTIALS ${env.USER_CREDENTIALS}"             
-                 withCredentials(['usernamePassword(credentialsid: anilcredentials, usernameVariable: USER, passwordVariable: PWD)']){
+                 withCredentials([
+                     usernamePassword(credentials: 'anilcredentials', usernameVariable: USER, passwordVariable: PWD)
+                 ]) {
                       echo "username: ${USER} password: ${PWD}"
                  }
                sshagent(['ec2-tomcat-stage']) {
