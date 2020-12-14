@@ -5,7 +5,7 @@ pipeline {
     parameters {
         string(name: 'dev_server', defaultValue: '52.66.69.64', description: 'dev server ip address')
         choice(name: 'branch', choices: ['master', 'dev'], description: 'branch to checkout and build')
-        boolean(name: 'onlymaster', defaultValue: false, description: 'run only when dev branch is checkedout')
+        booleanParam(name: 'onlymaster', defaultValue: false, description: 'run only when dev branch is checkedout')
     }
     tools {
         maven 'localmaven'
