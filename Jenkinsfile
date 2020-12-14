@@ -4,8 +4,9 @@ pipeline {
             }
     parameters {
         string(name: 'dev_server', defaultValue: '52.66.69.64', description: 'dev server ip address')
+        string(name: 'prod_server', defaultValue: '13.127.36.54', description: 'prod server ip address')
         choice(name: 'branch', choices: ['master', 'dev'], description: 'branch to checkout and build')
-        booleanParam(name: 'onlymaster', defaultValue: false, description: 'run only when dev branch is checkedout')
+        booleanParam(name: 'onlymaster', defaultValue: false, description: 'run only when master branch is checkedout')
     }
     tools {
         maven 'localmaven'
@@ -55,8 +56,6 @@ pipeline {
            }
         }
         stage('Deploy to stage'){
-         
-        
              steps {
                  echo "user credentials using environmet varaible USER_CREDENTIALS ${env.USER_CREDENTIALS}"             
                  withCredentials([
@@ -69,5 +68,17 @@ pipeline {
                }
              }
         }
+        stage('Deploy to prod'){
+            agent {
+                label 'jenkins-slave2'
+            }
+             steps {
+                 echo 'deploying to production'                 
+               sshagent(['ec2-tomcat-prod']) {
+                   sh "scp -o StrictHostKeyChecking=no ${env.ARTIFACT_TO_COPY} tomcat-prod@${params.prod_server}:/usr/share/tomcat/webapps"
+               }
+             }
+        }
+        
     }
 }

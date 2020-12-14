@@ -19,6 +19,6 @@ public class RestControllerExample {
 	
 	@GetMapping("/hobby")
 	public String getHobby() {
-		return "jenkinsfile with stages on different slaves on master branch";
+		return "jenkinsfile with stages on different slaves on master branch new test";
 	}
 }
